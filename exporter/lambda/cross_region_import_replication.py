@@ -8,7 +8,7 @@ import botocore
 
 MAX_OUTPUTS_PER_TEMPLATE = 200
 
-
+print("test")
 def lambda_handler(*_):
     try:
         print("trying")
@@ -48,7 +48,7 @@ def _lambda_handler():
 
     master_template = {
         "AWSTemplateFormatVersion": "2010-09-09",
-        "Description": "Auto-generated templates to simulate the standard importation behaviour on other regions",
+        "Description": "Auto-generated templates to simulate the standard import behaviour of other regions",
         "Resources": master_template_resources,
     }
 
