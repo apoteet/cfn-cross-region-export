@@ -6,7 +6,7 @@ EXPORTER_STACK_NAME=CrossRegionExporter
 EXPORTER_SOURCE_TEMPLATE_PATH = exporter/cloudformation/cross-region-exporter.yml
 EXPORTER_GENERATED_TEMPLATE_ABSOLUTE_PATH = $(shell pwd)/dist/cross-region-exporter.yml
 
-BUCKET_NAME=cfn-cross-region-export-`aws sts get-caller-identity --output text --query 'Account'`-$${AWS_DEFAULT_REGION:-`aws configure get region`}
+BUCKET_NAME=temp-cfn-cross-region-export-`aws sts get-caller-identity --output text --query 'Account'`-$${AWS_DEFAULT_REGION:-`aws configure get region`}
 VERSION = $(shell git describe --always --tags)
 
 # Check if variable has been defined, otherwise print custom error message
@@ -21,7 +21,7 @@ install:
 	@pip install aws-sam-cli
 
 check-bucket:
-	@aws s3api head-bucket --bucket $(BUCKET_NAME) &> /dev/null || aws s3 mb s3://$(BUCKET_NAME)
+	@aws s3api head-bucket --bucket $(BUCKET_NAME) --region=$(AWS_DEFAULT_REGION) &> /dev/null || aws s3 mb s3://$(BUCKET_NAME) --region=$(AWS_DEFAULT_REGION)
 
 package-importer: check-bucket
 	@./package_lambda.sh importer/lambda cross_region_importer
