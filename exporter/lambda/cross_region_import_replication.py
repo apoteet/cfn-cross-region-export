@@ -5,18 +5,17 @@ from uuid import uuid4
 
 import boto3
 import botocore
-import sentry_sdk
-from sentry_sdk.integrations.aws_lambda import AwsLambdaIntegration
-
-sentry_sdk.init(integrations=[AwsLambdaIntegration(timeout_warning=True)])
 
 MAX_OUTPUTS_PER_TEMPLATE = 200
 
 
 def lambda_handler(*_):
     try:
+        print("trying")
         _lambda_handler()
+        print("success")
     except:
+        print("Failed")
         raise
 
 

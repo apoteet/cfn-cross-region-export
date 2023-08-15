@@ -36,9 +36,7 @@ package-exporter: check-bucket
 	@sam package --template-file $(EXPORTER_SOURCE_TEMPLATE_PATH) --s3-bucket $(BUCKET_NAME) --s3-prefix cloudformation/$(EXPORTER_SOURCE_TEMPLATE_PATH).yml --output-template-file $(EXPORTER_GENERATED_TEMPLATE_ABSOLUTE_PATH)
 
 deploy-exporter: package-exporter
-	$(call check_defined, SENTRY_DSN, Ex: make deploy-exporter SENTRY_DSN=https://...@sentry.io/...)
-	$(call check_defined, SENTRY_ENV, Ex: make deploy-exporter SENTRY_ENV=dev)
-	@sam deploy --template-file $(EXPORTER_GENERATED_TEMPLATE_ABSOLUTE_PATH) --stack-name $(EXPORTER_STACK_NAME) --capabilities CAPABILITY_IAM --parameter-overrides SentryDsn=$(SENTRY_DSN) SentryEnvironment=$(SENTRY_ENV) Version=$(VERSION)
+	@sam deploy --template-file $(EXPORTER_GENERATED_TEMPLATE_ABSOLUTE_PATH) --stack-name $(EXPORTER_STACK_NAME) --capabilities CAPABILITY_IAM --parameter-overrides Version=$(VERSION)
 
 check-deployed-version:
 	@aws ssm get-parameters-by-path --path "/project-versions/cfn-cross-region-export/" --query "Parameters[*].[Name,Value]"
